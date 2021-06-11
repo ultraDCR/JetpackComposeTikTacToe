@@ -15,14 +15,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +27,6 @@ import com.ultradcr.ticktactoe.AlertView.MyAlert
 import com.ultradcr.ticktactoe.ui.theme.*
 import java.util.*
 import kotlin.concurrent.timerTask
-import kotlin.random.Random
 
 @ExperimentalFoundationApi
 class MainActivity : ComponentActivity() {
@@ -53,22 +49,24 @@ class MainActivity : ComponentActivity() {
 fun Greeting(viewModel: TickTackToeViewModel,name: String) {
     Scaffold(
         topBar = {
-            TopAppBar() {
-                Text(name, modifier = Modifier.padding(8.dp))
+            TopAppBar {
+                Text(name, modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(), textAlign = TextAlign.Center)
             }
         }
     ) {
         var alertType by remember {
             mutableStateOf(AlertType.None)
         }
-        var rows = remember { viewModel.rows }
+        val rows = remember { viewModel.rows }
         Box(
             modifier = Modifier
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Purple500,
-                            Purple700
+                            DarkBlue,
+                            DarkBlue2
                         )
                     )
                 )
@@ -90,7 +88,7 @@ fun Greeting(viewModel: TickTackToeViewModel,name: String) {
                             .padding(15.dp)
                             .clip(CircleShape)
                             .aspectRatio(1F)
-                            .background(Teal200)
+                            .background(CircleBg)
                             .clickable(enabled = clickEnable) {
                                 if (viewModel.canMakeMove(rows, row)) {
 
@@ -123,7 +121,7 @@ fun Greeting(viewModel: TickTackToeViewModel,name: String) {
 
                                             clickEnable = true
 
-                                        }, 200
+                                        }, 500
                                     )
 
                                     Log.d("TAG", "Greeting: $rows")
